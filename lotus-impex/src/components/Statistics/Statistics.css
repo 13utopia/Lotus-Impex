@@ -1,0 +1,71 @@
+.statistics {
+  padding: 0 0 60px 0; /* No top padding as it flows from products */
+  background-color: var(--darker-bg); /* The background behind them is dark */
+  position: relative;
+}
+
+.statistics::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-color: #f9f9fa; /* Top half is light from previous section */
+  z-index: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 160px;
+}
+
+.stat-card.stat-light {
+  background-color: var(--white);
+  color: var(--primary-blue);
+}
+
+.stat-card h3 {
+  font-size: 3rem;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.stat-card p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-card.stat-light p {
+  color: var(--text-dark);
+}
+
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

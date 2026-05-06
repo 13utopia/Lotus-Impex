@@ -1,0 +1,113 @@
+.roadmap {
+  padding: 80px 20px 100px;
+  background-color: var(--darker-bg);
+  background-image: url('/images/Industrial pipes.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  color: var(--white);
+  text-align: center;
+}
+
+.roadmap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 25, 0.85); /* Dark overlay */
+  z-index: 0;
+}
+
+.roadmap .container {
+  position: relative;
+  z-index: 1;
+}
+
+.roadmap-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+  position: relative;
+}
+
+.roadmap-line {
+  position: absolute;
+  top: 30px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: -1;
+}
+
+.roadmap-step {
+  flex: 1;
+  padding: 0 20px;
+  position: relative;
+}
+
+.step-icon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--darker-bg);
+  border: 2px solid var(--primary-blue);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  transition: var(--transition);
+}
+
+.icon-inner {
+  width: 20px;
+  height: 20px;
+  background-color: var(--primary-blue);
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.roadmap-step:hover .step-icon {
+  background-color: var(--primary-blue);
+}
+
+.roadmap-step:hover .icon-inner {
+  background-color: var(--white);
+}
+
+.roadmap-step h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--light-blue);
+}
+
+.roadmap-step p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 768px) {
+  .roadmap-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+  
+  .roadmap-line {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    height: auto;
+    right: auto;
+    transform: translateX(-50%);
+  }
+  
+  .roadmap-step {
+    padding: 0;
+  }
+}
