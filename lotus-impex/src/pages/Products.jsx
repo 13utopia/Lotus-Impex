@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 import './Products.css';
 
 const Products = () => {
@@ -25,7 +26,7 @@ const Products = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/products');
+      const res = await axios.get(`${API_BASE_URL}/api/products`);
       setProducts(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
@@ -37,7 +38,7 @@ const Products = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/categories');
+      const res = await axios.get(`${API_BASE_URL}/api/categories`);
       setCategories(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
@@ -149,7 +150,7 @@ const Products = () => {
                           )}
                           {item.images?.length ? (
                             <img
-                              src={`http://localhost:5000${item.images[0]}`}
+                              src={`${API_BASE_URL}${item.images[0]}`}
                               alt={item.title}
                             />
                           ) : (
@@ -193,7 +194,7 @@ const Products = () => {
                           )}
                           {item.images?.length ? (
                             <img
-                              src={`http://localhost:5000${item.images[0]}`}
+                              src={`${API_BASE_URL}${item.images[0]}`}
                               alt={item.title}
                             />
                           ) : (

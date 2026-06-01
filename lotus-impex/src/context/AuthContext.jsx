@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 export const AuthContext = createContext();
 
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      const res = await axios.post(`${API_BASE_URL}/api/auth/login`, { username, password });
       setAdmin(res.data);
       localStorage.setItem('lotus_admin', JSON.stringify(res.data));
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;

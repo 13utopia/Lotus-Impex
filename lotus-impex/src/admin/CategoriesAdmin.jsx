@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { API_BASE_URL } from '../config/api';
 import './Admin.css';
 
 const CategoriesAdmin = () => {
@@ -16,7 +17,7 @@ const CategoriesAdmin = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/categories');
+      const res = await axios.get(`${API_BASE_URL}/api/categories`);
       setCategories(res.data);
     } catch (err) {
       console.error(err);
@@ -28,9 +29,9 @@ const CategoriesAdmin = () => {
     setError('');
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/categories/${editingId}`, { name });
+        await axios.put(`${API_BASE_URL}/api/categories/${editingId}`, { name });
       } else {
-        await axios.post('http://localhost:5000/api/categories', { name });
+        await axios.post(`${API_BASE_URL}/api/categories`, { name });
       }
       setName('');
       setEditingId(null);
@@ -48,7 +49,7 @@ const CategoriesAdmin = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/categories/${id}`);
+        await axios.delete(`${API_BASE_URL}/api/categories/${id}`);
         fetchCategories();
       } catch (err) {
         console.error(err);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { API_BASE_URL } from '../config/api';
 import './Admin.css';
 
 const DRAFT_STORAGE_KEY = 'lotus-impex-admin-product-draft';
@@ -160,7 +161,7 @@ const ProductsAdmin = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/products');
+      const res = await axios.get(`${API_BASE_URL}/api/products`);
       setProducts(res.data);
     } catch (err) {
       console.error(err);
@@ -169,7 +170,7 @@ const ProductsAdmin = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/categories');
+      const res = await axios.get(`${API_BASE_URL}/api/categories`);
       setCategories(res.data);
     } catch (err) {
       console.error(err);
@@ -242,7 +243,7 @@ const ProductsAdmin = () => {
         for (let i = 0; i < imageFiles.length; i++) {
           formData.append('images', imageFiles[i]);
         }
-        const uploadRes = await axios.post('http://localhost:5000/api/products/upload', formData, {
+        const uploadRes = await axios.post(`${API_BASE_URL}/api/products/upload`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         uploadedImageUrls = [...uploadedImageUrls, ...uploadRes.data.imagePaths];
@@ -276,9 +277,9 @@ const ProductsAdmin = () => {
       };
 
       if (isEditing) {
-        await axios.put(`http://localhost:5000/api/products/${currentId}`, productData);
+        await axios.put(`${API_BASE_URL}/api/products/${currentId}`, productData);
       } else {
-        await axios.post('http://localhost:5000/api/products', productData);
+        await axios.post(`${API_BASE_URL}/api/products`, productData);
       }
       
       resetForm();
@@ -326,7 +327,7 @@ const ProductsAdmin = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/products/${id}`);
+        await axios.delete(`${API_BASE_URL}/api/products/${id}`);
         fetchProducts();
       } catch (err) {
         console.error(err);
@@ -381,7 +382,7 @@ const ProductsAdmin = () => {
             {images.length > 0 && (
               <div className="admin-image-preview">
                 {images.map((img, idx) => (
-                  <img key={idx} src={`http://localhost:5000${img}`} alt="Preview" width="50" />
+                  <img key={idx} src={`${API_BASE_URL}${img}`} alt="Preview" width="50" />
                 ))}
               </div>
             )}
@@ -537,7 +538,7 @@ const ProductsAdmin = () => {
               <tr key={prod.id}>
                 <td>
                   {prod.images && prod.images.length > 0 && (
-                    <img src={`http://localhost:5000${prod.images[0]}`} alt={prod.title} width="40" height="40" style={{ objectFit: 'cover' }} />
+                    <img src={`${API_BASE_URL}${prod.images[0]}`} alt={prod.title} width="40" height="40" style={{ objectFit: 'cover' }} />
                   )}
                 </td>
                 <td>{prod.title}</td>

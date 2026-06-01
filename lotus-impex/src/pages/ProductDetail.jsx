@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 import './ProductDetail.css';
 
 const formatValue = (value) => {
@@ -29,8 +30,8 @@ const ProductDetail = () => {
     const fetchData = async () => {
       try {
         const [productRes, categoriesRes] = await Promise.all([
-          axios.get(`http://localhost:5000/api/products/${id}`),
-          axios.get('http://localhost:5000/api/categories'),
+          axios.get(`${API_BASE_URL}/api/products/${id}`),
+          axios.get(`${API_BASE_URL}/api/categories`),
         ]);
 
         setProduct(productRes.data);
@@ -101,7 +102,7 @@ const ProductDetail = () => {
           <div className="product-gallery">
             <div className="main-image">
               {activeImage ? (
-                <img src={`http://localhost:5000${activeImage}`} alt={product.title} />
+                <img src={`${API_BASE_URL}${activeImage}`} alt={product.title} />
               ) : (
                 <div className="product-main-image-empty">No image available</div>
               )}
@@ -115,7 +116,7 @@ const ProductDetail = () => {
                     className={`thumbnail ${activeImage === img ? 'active' : ''}`}
                     onClick={() => setActiveImage(img)}
                   >
-                    <img src={`http://localhost:5000${img}`} alt={`${product.title} ${idx}`} />
+                    <img src={`${API_BASE_URL}${img}`} alt={`${product.title} ${idx}`} />
                   </button>
                 ))}
               </div>

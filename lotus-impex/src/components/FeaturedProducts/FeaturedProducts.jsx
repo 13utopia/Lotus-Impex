@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 import './FeaturedProducts.css';
 
 const FeaturedProducts = () => {
@@ -9,7 +10,7 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/products');
+        const res = await axios.get(`${API_BASE_URL}/api/products`);
         const products = Array.isArray(res.data) ? res.data : [];
         setFeaturedProducts(products.filter((product) => product.is_featured));
       } catch (error) {
@@ -40,7 +41,7 @@ const FeaturedProducts = () => {
                 <div className="featured-img-wrapper">
                   {item.images?.length ? (
                     <img
-                      src={`http://localhost:5000${item.images[0]}`}
+                      src={`${API_BASE_URL}${item.images[0]}`}
                       alt={item.title}
                     />
                   ) : (
