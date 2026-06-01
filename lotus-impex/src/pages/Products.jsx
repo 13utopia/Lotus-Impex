@@ -4,10 +4,35 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config/api';
 import './Products.css';
 
+const PRODUCTS_CACHE_KEY = 'lotus-impex-products-cache';
+const CATEGORIES_CACHE_KEY = 'lotus-impex-categories-cache';
+
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(() => {
+    try {
+      const cached = localStorage.getItem(PRODUCTS_CACHE_KEY);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [categories, setCategories] = useState(() => {
+    try {
+      const cached = localStorage.getItem(CATEGORIES_CACHE_KEY);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      return !localStorage.getItem(PRODUCTS_CACHE_KEY) || !localStorage.getItem(CATEGORIES_CACHE_KEY);
+    } catch {
+      return true;
+    }
+  });
+  const [productsLoading, setProductsLoading] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [keyword, setKeyword] = useState('');
   const location = useLocation();
 
@@ -23,26 +48,39 @@ const Products = () => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    setLoading(productsLoading || categoriesLoading);
+  }, [productsLoading, categoriesLoading]);
+
   const fetchProducts = async () => {
-    setLoading(true);
+    setProductsLoading(true);
     try {
       const res = await axios.get(`${API_BASE_URL}/api/products`);
-      setProducts(Array.isArray(res.data) ? res.data : []);
+      const nextProducts = Array.isArray(res.data) ? res.data : [];
+      setProducts(nextProducts);
+      localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(nextProducts));
     } catch (err) {
       console.error(err);
       setProducts([]);
+      localStorage.removeItem(PRODUCTS_CACHE_KEY);
     } finally {
-      setLoading(false);
+      setProductsLoading(false);
     }
   };
 
   const fetchCategories = async () => {
+    setCategoriesLoading(true);
     try {
       const res = await axios.get(`${API_BASE_URL}/api/categories`);
-      setCategories(Array.isArray(res.data) ? res.data : []);
+      const nextCategories = Array.isArray(res.data) ? res.data : [];
+      setCategories(nextCategories);
+      localStorage.setItem(CATEGORIES_CACHE_KEY, JSON.stringify(nextCategories));
     } catch (err) {
       console.error(err);
       setCategories([]);
+      localStorage.removeItem(CATEGORIES_CACHE_KEY);
+    } finally {
+      setCategoriesLoading(false);
     }
   };
 
@@ -108,7 +146,28 @@ const Products = () => {
           </div>
 
           {loading ? (
-            <div className="products-loading">Loading products...</div>
+            <div className="products-loading-grid" aria-busy="true" aria-live="polite">
+              <div className="products-loading-sidebar">
+                <div className="products-skeleton products-skeleton--title" />
+                {[...Array(4)].map((_, index) => (
+                  <div className="products-skeleton products-skeleton--line" key={index} />
+                ))}
+              </div>
+              <div className="products-loading-main">
+                <div className="products-grid products-grid--category">
+                  {[...Array(6)].map((_, index) => (
+                    <div className="product-card product-card--skeleton" key={index}>
+                      <div className="product-card-image">
+                        <div className="products-skeleton products-skeleton--image" />
+                      </div>
+                      <div className="product-card-body">
+                        <div className="products-skeleton products-skeleton--text" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           ) : activeCategory ? (
             <div className="products-category-layout">
               <aside className="products-sidebar">

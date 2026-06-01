@@ -3,19 +3,31 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../config/api';
 import './FeaturedProducts.css';
 
+const FEATURED_PRODUCTS_CACHE_KEY = 'lotus-impex-featured-products-cache';
+
 const FeaturedProducts = () => {
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [featuredProducts, setFeaturedProducts] = useState(() => {
+    try {
+      const cached = localStorage.getItem(FEATURED_PRODUCTS_CACHE_KEY);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => featuredProducts.length === 0);
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/products`);
         const products = Array.isArray(res.data) ? res.data : [];
-        setFeaturedProducts(products.filter((product) => product.is_featured));
+        const nextFeaturedProducts = products.filter((product) => product.is_featured);
+        setFeaturedProducts(nextFeaturedProducts);
+        localStorage.setItem(FEATURED_PRODUCTS_CACHE_KEY, JSON.stringify(nextFeaturedProducts));
       } catch (error) {
         console.error('Failed to load featured products', error);
         setFeaturedProducts([]);
+        localStorage.removeItem(FEATURED_PRODUCTS_CACHE_KEY);
       } finally {
         setLoading(false);
       }
@@ -33,7 +45,18 @@ const FeaturedProducts = () => {
         </div>
 
         {loading ? (
-          <div className="featured-empty">Loading featured products...</div>
+          <div className="featured-grid featured-grid--loading" aria-busy="true" aria-live="polite">
+            {[...Array(4)].map((_, index) => (
+              <div className="featured-card featured-card--skeleton" key={index}>
+                <div className="featured-img-wrapper">
+                  <div className="featured-skeleton featured-skeleton--image" />
+                </div>
+                <div className="featured-content">
+                  <div className="featured-skeleton featured-skeleton--text" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : featuredProducts.length > 0 ? (
           <div className="featured-grid">
             {featuredProducts.map((item) => (

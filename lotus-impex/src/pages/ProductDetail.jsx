@@ -15,18 +15,50 @@ const splitLines = (value) =>
     .map((line) => line.trim())
     .filter(Boolean);
 
+const getProductCacheKey = (productId) => `lotus-impex-product-detail-${productId}`;
+
 const ProductDetail = () => {
   const { id } = useParams();
   const location = useLocation();
-  const [product, setProduct] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [product, setProduct] = useState(() => {
+    try {
+      const cached = localStorage.getItem(getProductCacheKey(id));
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [categories, setCategories] = useState(() => {
+    try {
+      const cached = localStorage.getItem('lotus-impex-categories-cache');
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [productLoading, setProductLoading] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [activeImage, setActiveImage] = useState('');
   const [activeTab, setActiveTab] = useState('description');
 
   const activeCategoryId = useMemo(() => new URLSearchParams(location.search).get('category'), [location.search]);
+  const loading = productLoading || categoriesLoading;
 
   useEffect(() => {
+    try {
+      const cachedProduct = localStorage.getItem(getProductCacheKey(id));
+      const nextProduct = cachedProduct ? JSON.parse(cachedProduct) : null;
+      setProduct(nextProduct);
+      if (nextProduct?.images?.length > 0) {
+        setActiveImage(nextProduct.images[0]);
+      } else {
+        setActiveImage('');
+      }
+    } catch {
+      setProduct(null);
+      setActiveImage('');
+    }
+
     const fetchData = async () => {
       try {
         const [productRes, categoriesRes] = await Promise.all([
@@ -36,6 +68,8 @@ const ProductDetail = () => {
 
         setProduct(productRes.data);
         setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
+        localStorage.setItem(getProductCacheKey(id), JSON.stringify(productRes.data));
+        localStorage.setItem('lotus-impex-categories-cache', JSON.stringify(Array.isArray(categoriesRes.data) ? categoriesRes.data : []));
 
         if (productRes.data.images && productRes.data.images.length > 0) {
           setActiveImage(productRes.data.images[0]);
@@ -43,10 +77,13 @@ const ProductDetail = () => {
       } catch (err) {
         console.error(err);
       } finally {
-        setLoading(false);
+        setProductLoading(false);
+        setCategoriesLoading(false);
       }
     };
 
+    setProductLoading(true);
+    setCategoriesLoading(true);
     fetchData();
   }, [id]);
 
@@ -72,7 +109,38 @@ const ProductDetail = () => {
       ]
     : [];
 
-  if (loading) return <div className="container" style={{ padding: '100px 0' }}>Loading...</div>;
+  if (loading && !product) {
+    return (
+      <div className="product-detail-page">
+        <div className="breadcrumbs">
+          <div className="container">
+            <span className="product-detail-skeleton product-detail-skeleton--crumb" />
+          </div>
+        </div>
+        <div className="container">
+          <div className="product-detail-skeleton-layout" aria-busy="true" aria-live="polite">
+            <div className="product-gallery">
+              <div className="main-image">
+                <div className="product-detail-skeleton product-detail-skeleton--image" />
+              </div>
+            </div>
+            <div className="product-info">
+              <div className="product-detail-skeleton product-detail-skeleton--title" />
+              <div className="product-detail-skeleton-grid">
+                {[...Array(8)].map((_, index) => (
+                  <React.Fragment key={index}>
+                    <div className="product-detail-skeleton product-detail-skeleton--label" />
+                    <div className="product-detail-skeleton product-detail-skeleton--value" />
+                  </React.Fragment>
+                ))}
+              </div>
+              <div className="product-detail-skeleton product-detail-skeleton--button" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (!product) return <div className="container" style={{ padding: '100px 0' }}>Product not found.</div>;
 
   return (
