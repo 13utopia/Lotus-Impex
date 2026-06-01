@@ -52,7 +52,6 @@ const actions = [
     label: 'Quote',
     href: '#contact',
     icon: quoteIcon,
-    active: true,
   },
   {
     label: 'Brochure',
