@@ -60,7 +60,6 @@ const Products = () => {
 
   const productBadges = (product) => {
     const badges = [];
-    if (product.is_featured) badges.push('Featured');
     if (product.is_new_arrival) badges.push('New Arrival');
     if (product.is_best_seller) badges.push('Best Seller');
     return badges;

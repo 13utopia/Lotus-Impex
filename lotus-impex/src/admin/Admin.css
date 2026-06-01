@@ -274,3 +274,112 @@
   margin-top: 10px;
 }
 
+@media (max-width: 900px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+  }
+
+  .admin-logo {
+    padding: 16px 20px;
+    text-align: center;
+  }
+
+  .admin-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 12px 6px;
+    justify-content: center;
+  }
+
+  .admin-nav-link {
+    padding: 10px 14px;
+    border-radius: 999px;
+  }
+
+  .admin-logout-btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px 20px 18px;
+  }
+
+  .admin-content {
+    padding: 18px;
+  }
+
+  .admin-page {
+    max-width: 100%;
+  }
+
+  .admin-dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-card {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-form-row {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .admin-inline-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-spec-row {
+    flex-direction: column;
+  }
+
+  .admin-spec-row .admin-btn-danger {
+    width: 100%;
+  }
+
+  .admin-card {
+    overflow-x: auto;
+  }
+
+  .admin-table {
+    min-width: 640px;
+  }
+
+  .admin-action-btn {
+    margin-bottom: 6px;
+  }
+
+  .admin-image-preview {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-content {
+    padding: 12px;
+  }
+
+  .admin-page h2 {
+    margin-bottom: 20px;
+    font-size: 1.35rem;
+  }
+
+  .admin-logo {
+    font-size: 1.2rem;
+  }
+
+  .admin-nav-link,
+  .admin-logout-btn {
+    font-size: 0.95rem;
+  }
+
+  .admin-card {
+    padding: 14px;
+  }
+}

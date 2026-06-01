@@ -135,12 +135,15 @@
   display: none;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 46px;
   height: 46px;
+  gap: 4px;
   border: 0;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.12);
   cursor: pointer;
+  padding: 0;
 }
 
 .navbar--home .hamburger {
@@ -153,7 +156,7 @@
   height: 2px;
   background-color: #ffffff;
   border-radius: 999px;
-  margin: 3px auto;
+  margin: 0;
 }
 
 .navbar--home .hamburger .bar {
@@ -268,5 +271,6 @@
   .hamburger {
     width: 42px;
     height: 42px;
+    gap: 3px;
   }
 }

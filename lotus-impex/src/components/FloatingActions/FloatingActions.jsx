@@ -37,15 +37,17 @@ const quoteIcon = (
   </svg>
 );
 
+const contactPhone = '+919930430789';
+
 const actions = [
   {
     label: 'Call',
-    href: 'tel:+8615158592172',
+    href: `tel:${contactPhone}`,
     icon: callIcon,
   },
   {
     label: 'WhatsApp',
-    href: 'https://wa.me/8615158592172',
+    href: 'https://wa.me/919930430789',
     icon: whatsappIcon,
   },
   {

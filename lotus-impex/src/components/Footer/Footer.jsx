@@ -139,15 +139,9 @@ const Footer = () => {
                 <path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" />
                 <circle cx="12" cy="10" r="2.5" />
               </svg>
-              <span>Address : "2901 Marmora Road, Glasgow, Seattle, WA 98122-109</span>
+              <span>Address : 9 jain bhavan , DR BHAJEKAR LANE, S.V.P.ROAD, MUMBAI 400004</span>
             </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
-              <span>Address : "2901 Marmora Road, Glasgow, Seattle, WA 98122-109</span>
-            </li>
+           
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M6 8V6a2 2 0 0 1 2-2h2" />
@@ -156,27 +150,21 @@ const Footer = () => {
                 <path d="M8 20H6a2 2 0 0 1-2-2v-2" />
                 <path d="m9 9 6 6" />
               </svg>
-              <span>Phone Number: +64 07 7880140</span>
+              <span>Phone Number: +919930430789</span>
             </li>
-            <li>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 6h16v12H4z" />
-                <path d="m4 7 8 6 8-6" />
-              </svg>
-              <span>Phone : +86-577-86990175</span>
-            </li>
+           
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M20.8 18.1c-.3.8-1.3 1.6-2.2 1.8-1.2.3-2.7.1-4.6-.7-2.4-1-4.3-2.4-6-4.1s-3.1-3.6-4.1-6C3.1 7.2 3 5.7 3.2 4.5c.2-.9 1-1.9 1.8-2.2.5-.2 1-.1 1.4.3l2 2c.4.4.5 1 .3 1.5L8 7.8c-.2.6 0 1.2.4 1.7l2.1 2.1c.5.5 1.1.6 1.7.4l1.7-.7c.5-.2 1.1-.1 1.5.3l2 2c.4.4.5.9.3 1.5Z" />
               </svg>
-              <span>Whatsapp : +8615158592172</span>
+              <span>Whatsapp : +919930430789</span>
             </li>
             <li>
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M4 6h16v12H4z" />
                 <path d="m4 7 8 6 8-6" />
               </svg>
-              <span>E-mail : sales@wzq1qgjx.cn</span>
+              <span>E-mail :  INFO@LOTUSIMPEX.CO.IN</span>
             </li>
           </ul>
         </div>

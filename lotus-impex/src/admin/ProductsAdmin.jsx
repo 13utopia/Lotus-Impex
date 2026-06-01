@@ -341,7 +341,6 @@ const ProductsAdmin = () => {
       
       <div className="admin-card">
         <h3>{isEditing ? 'Edit Product' : 'Add New Product'}</h3>
-        {error && <div className="admin-error">{error}</div>}
         <form onSubmit={handleSubmit} className="admin-form">
           <div className="admin-form-row">
             <div className="admin-form-group">
@@ -519,6 +518,7 @@ const ProductsAdmin = () => {
               <button type="button" onClick={resetForm} className="admin-btn-secondary ml-10">Cancel</button>
             )}
           </div>
+          {error && <div className="admin-error">{error}</div>}
         </form>
       </div>
 

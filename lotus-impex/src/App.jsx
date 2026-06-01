@@ -20,9 +20,12 @@ const ScrollToTop = () => {
 };
 
 function App() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
     <div className="app">
-      <FloatingActions />
+      {!isAdminRoute && <FloatingActions />}
       <Routes>
         <Route path="/admin/*" element={<AdminLayout />} />
         
