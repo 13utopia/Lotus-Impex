@@ -1,67 +1,154 @@
-.history-banner {
-  padding: 60px 20px;
-  background-color: var(--white);
+.success-story-section {
+  background: #ffffff;
+  padding: 60px 20px 80px;
 }
 
-.banner-container {
-  background-color: var(--primary-blue);
-  border-radius: 12px;
-  padding: 60px;
-  color: var(--white);
-  box-shadow: 0 20px 40px rgba(0, 75, 135, 0.2);
-  background-image: linear-gradient(135deg, var(--primary-blue) 0%, #003666 100%);
+.success-story-container {
+  max-width: 1160px;
+}
+
+.success-story-card {
+  display: grid;
+  grid-template-columns: 390px minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-story-visual {
   position: relative;
+  min-height: 190px;
+  border-radius: 22px;
   overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(17, 73, 127, 0.94), rgba(17, 73, 127, 0.94)),
+    url('/images/import.webp');
+  background-size: cover;
+  background-position: center center;
+  box-shadow: 0 12px 28px rgba(17, 73, 127, 0.18);
 }
 
-.banner-container::after {
+.success-story-visual::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background: url('/images/Section.png') no-repeat right center; /* Or just a placeholder pattern */
-  background-size: cover;
-  opacity: 0.2;
-  mix-blend-mode: overlay;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(9, 24, 51, 0.2) 0%, rgba(9, 24, 51, 0) 50%),
+    linear-gradient(180deg, rgba(17, 73, 127, 0.4) 0%, rgba(17, 73, 127, 0.1) 100%);
+  pointer-events: none;
 }
 
-.banner-content {
-  max-width: 600px;
+.success-story-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 73, 127, 0.12);
+  z-index: 0;
+}
+
+.success-story-visual-copy {
   position: relative;
   z-index: 1;
+  padding: 28px 30px;
+  color: #ffffff;
 }
 
-.banner-title {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: var(--white);
+.success-story-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  opacity: 0.92;
 }
 
-.banner-content p {
-  font-size: 1.05rem;
-  line-height: 1.8;
-  margin-bottom: 30px;
-  color: rgba(255, 255, 255, 0.9);
+.success-story-kicker::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.8);
 }
 
-.banner-btn {
-  background-color: var(--white);
-  color: var(--primary-blue);
+.success-story-visual h3 {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.55rem;
+  line-height: 1.25;
+  font-weight: 700;
+  text-transform: none;
+  max-width: 245px;
 }
 
-.banner-btn:hover {
-  background-color: #f0f0f0;
-  color: var(--primary-blue-hover);
+.success-story-content {
+  padding-right: 12px;
 }
 
-@media (max-width: 768px) {
-  .banner-container {
-    padding: 40px 30px;
+.success-story-title {
+  margin: 0 0 16px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.05rem;
+  line-height: 1.15;
+  font-weight: 700;
+  color: #20324d;
+  text-transform: none;
+}
+
+.success-story-description {
+  margin: 0 0 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #6b7280;
+  max-width: 680px;
+}
+
+.success-story-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: #11497f;
+}
+
+.success-story-link span {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 900px) {
+  .success-story-card {
+    grid-template-columns: 1fr;
   }
-  
-  .banner-title {
-    font-size: 2rem;
+
+  .success-story-visual {
+    min-height: 180px;
+    max-width: 100%;
+  }
+
+  .success-story-title {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .success-story-section {
+    padding: 40px 20px 60px;
+  }
+
+  .success-story-visual-copy {
+    padding: 28px 22px;
+  }
+
+  .success-story-visual h3 {
+    font-size: 1.25rem;
+    max-width: 190px;
+  }
+
+  .success-story-description {
+    font-size: 0.95rem;
   }
 }

@@ -1,40 +1,58 @@
 import React from 'react';
 import './Hero.css';
 
+const tickerItems = ['Flanges', 'Fasteners', 'Pipes', 'Valves', 'Fittings', 'Tubes'];
+
 const Hero = () => {
   return (
-    <section className="hero">
-      <div className="hero-background" style={{ backgroundImage: "url('/images/Background.png')" }}></div>
-      <div className="hero-overlay"></div>
-      
+    <section className="hero" id="home">
+      <div className="hero-background" />
+      <div className="hero-overlay" />
+      <div className="hero-fade" />
+      <div className="hero-sheen hero-sheen-left" />
+      <div className="hero-sheen hero-sheen-right" />
+
       <div className="container hero-content">
-        <h1>Powering Global Flow Systems With <span>Precision Engineering Reliability</span></h1>
-        <p>A comprehensive range of industrial fluid control solutions for the world's most demanding environments.</p>
-        <div className="hero-buttons">
-          <button className="btn">Explore Products</button>
-          <button className="btn btn-outline" style={{ borderColor: 'var(--white)', color: 'var(--white)' }}>Company Profile</button>
+        <div className="hero-copy">
+          <h1>
+            POWERING GLOBAL FLOW<br />
+            SYSTEM WITH <span className="highlight-blue">PRECISION</span><br />
+            ENGINEERING RELIABILITY
+          </h1>
+          <p className="hero-desc">
+            Leading manufacturers and exporters of sanitary valves, fittings, and piping solutions designed for hygiene-critical industries worldwide.
+          </p>
+
+          <div className="hero-buttons">
+            <a className="hero-btn hero-btn-primary" href="#contact">
+              Get A Quote <span className="btn-arrow">→</span>
+            </a>
+            <a className="hero-btn hero-btn-outline" href="#products">
+              Explore Products
+            </a>
+          </div>
+
+          <div className="hero-service-card">
+            <div className="card-content">
+              <h3>Request Services Today!</h3>
+              <p>Our professional team is always ready to serve you anytime.</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="hero-subnav">
-        <div className="container subnav-container">
-          <a href="#flanges">Flanges</a>
-          <span className="separator">•</span>
-          <a href="#fasteners">Fasteners</a>
-          <span className="separator">•</span>
-          <a href="#pipes">Pipes</a>
-          <span className="separator">•</span>
-          <a href="#valves">Valves</a>
-          <span className="separator">•</span>
-          <a href="#fittings">Fittings</a>
-          <span className="separator">•</span>
-          <a href="#filters">Filters</a>
-          <span className="separator">•</span>
-          <a href="#forged">Forged</a>
-          <span className="separator">•</span>
-          <a href="#cnc">CNC Machined</a>
-          <span className="separator">•</span>
-          <a href="#spares">Spares</a>
+      <div className="hero-ticker" aria-label="Product ticker">
+        <div className="hero-ticker-track">
+          {Array.from({ length: 4 }).map((_, blockIndex) => (
+            <React.Fragment key={blockIndex}>
+              {tickerItems.map((item) => (
+                <React.Fragment key={`${blockIndex}-${item}`}>
+                  <span className="hero-ticker-item">{item}</span>
+                  <span className="hero-ticker-dot" aria-hidden="true" />
+                </React.Fragment>
+              ))}
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </section>

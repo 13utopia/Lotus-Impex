@@ -1,6 +1,10 @@
 .statistics {
   padding: 0 0 60px 0; /* No top padding as it flows from products */
-  background-color: var(--darker-bg); /* The background behind them is dark */
+  background-color: #0a0b0d; /* Faded warehouse background area */
+  background-image: linear-gradient(rgba(10, 11, 13, 0.88), rgba(10, 11, 13, 0.88)), url('/images/Industrial inventory.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   position: relative;
 }
 
@@ -10,8 +14,8 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 50%;
-  background-color: #f9f9fa; /* Top half is light from previous section */
+  height: 45px; /* Cards sit mostly inside the dark background, top part out */
+  background-color: #ffffff; /* Top part is white matching products section */
   z-index: 0;
 }
 
@@ -23,39 +27,118 @@
   z-index: 1;
 }
 
+/* Card General Styling */
 .stat-card {
-  background-color: var(--primary-blue);
-  color: var(--white);
-  padding: 40px 20px;
+  padding: 45px 20px;
   text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 160px;
+  min-height: 180px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
+/* White Card Style (Default state for Cards 2-4) */
 .stat-card.stat-light {
-  background-color: var(--white);
-  color: var(--primary-blue);
+  background-color: #ffffff;
+  color: #0b427b; /* Blue numbers */
 }
 
-.stat-card h3 {
-  font-size: 3rem;
-  margin-bottom: 5px;
-  font-weight: 700;
-}
-
-.stat-card p {
-  font-size: 1.1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.stat-card.stat-light h3 {
+  color: #0b427b;
+  transition: color 0.3s ease;
 }
 
 .stat-card.stat-light p {
-  color: var(--text-dark);
+  color: #4b5563; /* Gray labels */
+  transition: color 0.3s ease;
+}
+
+/* Blue Card Style (Default state for Card 1) */
+.stat-card.stat-blue {
+  background-color: #124b82; /* Premium brand steel blue */
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.stat-card.stat-blue h3 {
+  color: #ffffff;
+}
+
+.stat-card.stat-blue p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Lotus Logo Watermark Styling */
+.lotus-watermark-img {
+  position: absolute;
+  top: 48%; /* Positioned lower so the lotus flower aligns to card center and text is hidden */
+  left: 50%;
+  transform: translate(-50%, -30%) scale(4.2); /* Bigger scale - lotus centered, text pushed far below */
+  width: 140px;
+  height: auto;
+  filter: brightness(0) invert(1); /* Pure white logo mask */
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.stat-card.stat-light .lotus-watermark-img {
+  opacity: 0; /* Hidden by default on light cards */
+}
+
+.stat-card.stat-blue .lotus-watermark-img {
+  opacity: 0.05; /* Faintly visible on blue card */
+}
+
+/* Hover State - Turn all cards into Card 1 (blue, white text, showing watermark) */
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card.stat-light:hover {
+  background-color: #124b82; /* Turn to blue bg */
+  border-color: transparent;
+}
+
+.stat-card.stat-light:hover h3 {
+  color: #ffffff; /* White numbers */
+}
+
+.stat-card.stat-light:hover p {
+  color: rgba(255, 255, 255, 0.9); /* White labels */
+}
+
+.stat-card:hover .lotus-watermark-img {
+  opacity: 0.05; /* Fade in watermark on hover */
+}
+
+.stat-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Text styles */
+.stat-card h3 {
+  font-size: 2.8rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  line-height: 1.1;
+}
+
+.stat-card p {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: none;
+  font-family: var(--font-body);
+  letter-spacing: 0.2px;
 }
 
 @media (max-width: 992px) {

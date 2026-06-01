@@ -8,7 +8,7 @@ const router = express.Router();
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const categories = await Category.find({});
+    const categories = await Category.findAll();
     res.json(categories);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 router.post('/', protect, async (req, res) => {
   try {
     const { name } = req.body;
-    const categoryExists = await Category.findOne({ name });
+    const categoryExists = await Category.findOne({ where: { name } });
     if (categoryExists) {
       return res.status(400).json({ message: 'Category already exists' });
     }
@@ -38,11 +38,11 @@ router.post('/', protect, async (req, res) => {
 router.put('/:id', protect, async (req, res) => {
   try {
     const { name } = req.body;
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findByPk(req.params.id);
     if (category) {
       category.name = name;
-      const updatedCategory = await category.save();
-      res.json(updatedCategory);
+      await category.save();
+      res.json(category);
     } else {
       res.status(404).json({ message: 'Category not found' });
     }
@@ -56,8 +56,9 @@ router.put('/:id', protect, async (req, res) => {
 // @access  Private
 router.delete('/:id', protect, async (req, res) => {
   try {
-    const category = await Category.findByIdAndDelete(req.params.id);
+    const category = await Category.findByPk(req.params.id);
     if (category) {
+      await category.destroy();
       res.json({ message: 'Category removed' });
     } else {
       res.status(404).json({ message: 'Category not found' });

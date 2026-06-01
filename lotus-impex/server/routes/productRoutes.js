@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
@@ -33,7 +34,7 @@ const upload = multer({
 // @route   POST /api/products/upload
 // @access  Private
 router.post('/upload', protect, upload.array('images', 5), (req, res) => {
-  if (!req.files) {
+  if (!req.files || req.files.length === 0) {
     return res.status(400).send('No image uploaded');
   }
   const imagePaths = req.files.map(file => `/${file.path.replace(/\\/g, '/')}`);
@@ -45,10 +46,12 @@ router.post('/upload', protect, upload.array('images', 5), (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.find({}).populate('category', 'name');
+    const products = await Product.findAll({
+      include: [{ model: Category, as: 'category' }]
+    });
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -57,7 +60,9 @@ router.get('/', async (req, res) => {
 // @access  Public
 router.get('/:id', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate('category', 'name');
+    const product = await Product.findByPk(req.params.id, {
+      include: [{ model: Category, as: 'category' }]
+    });
     if (product) {
       res.json(product);
     } else {
@@ -73,9 +78,13 @@ router.get('/:id', async (req, res) => {
 // @access  Private
 router.post('/', protect, async (req, res) => {
   try {
-    const product = new Product(req.body);
-    const createdProduct = await product.save();
-    res.status(201).json(createdProduct);
+    const images = Array.isArray(req.body.images) ? req.body.images.filter(Boolean) : [];
+    if (images.length === 0) {
+      return res.status(400).json({ message: 'At least one product image is required' });
+    }
+
+    const product = await Product.create(req.body);
+    res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -86,8 +95,14 @@ router.post('/', protect, async (req, res) => {
 // @access  Private
 router.put('/:id', protect, async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const product = await Product.findByPk(req.params.id);
     if (product) {
+      const nextImages = Array.isArray(req.body.images) ? req.body.images.filter(Boolean) : [];
+      if (nextImages.length === 0) {
+        return res.status(400).json({ message: 'At least one product image is required' });
+      }
+
+      await product.update(req.body);
       res.json(product);
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -102,8 +117,9 @@ router.put('/:id', protect, async (req, res) => {
 // @access  Private
 router.delete('/:id', protect, async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findByPk(req.params.id);
     if (product) {
+      await product.destroy();
       res.json({ message: 'Product removed' });
     } else {
       res.status(404).json({ message: 'Product not found' });

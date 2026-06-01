@@ -41,7 +41,7 @@ const CategoriesAdmin = () => {
   };
 
   const handleEdit = (category) => {
-    setEditingId(category._id);
+    setEditingId(category.id);
     setName(category.name);
   };
 
@@ -97,11 +97,11 @@ const CategoriesAdmin = () => {
           </thead>
           <tbody>
             {categories.map((cat) => (
-              <tr key={cat._id}>
+              <tr key={cat.id}>
                 <td>{cat.name}</td>
                 <td>
                   <button onClick={() => handleEdit(cat)} className="admin-action-btn edit-btn">Edit</button>
-                  <button onClick={() => handleDelete(cat._id)} className="admin-action-btn delete-btn">Delete</button>
+                  <button onClick={() => handleDelete(cat.id)} className="admin-action-btn delete-btn">Delete</button>
                 </td>
               </tr>
             ))}

@@ -1,39 +1,47 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+  const isProductPage = location.pathname.startsWith('/products') || location.pathname.startsWith('/product/');
+  const logoSrc = isHome
+    ? '/images/logo.png'
+    : isProductPage
+      ? '/images/logo-product.webp'
+      : '/images/logo-white.webp';
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <header className="navbar">
+    <header className={`navbar ${isHome ? 'navbar--home' : 'navbar--inner'}`}>
       <div className="navbar-container container">
-        <div className="navbar-logo">
-          {/* Using text for logo if we don't have the logo asset, or simple CSS logo */}
-          <div className="logo-icon"></div>
-          <span className="logo-text">LOTUS IMPEX</span>
-        </div>
-        
+        <Link className="navbar-logo" to="/" aria-label="Lotus Impex home">
+          <img src={logoSrc} alt="Lotus Impex" className="navbar-logo-image" />
+        </Link>
+
+        <button className="hamburger" onClick={toggleMenu} aria-label="Toggle menu" aria-expanded={isOpen}>
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </button>
+
         <nav className={`navbar-links ${isOpen ? 'active' : ''}`}>
+          <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
           <a href="#about" onClick={() => setIsOpen(false)}>About Us</a>
-          <a href="#products" onClick={() => setIsOpen(false)}>Products</a>
-          <a href="#industries" onClick={() => setIsOpen(false)}>Industries</a>
-          <a href="#quality" onClick={() => setIsOpen(false)}>Quality</a>
+          <Link to="/products" onClick={() => setIsOpen(false)}>Products</Link>
+          <a href="#contact" onClick={() => setIsOpen(false)}>Contact Us</a>
           <div className="navbar-cta-mobile">
-            <button className="btn">Contact Us</button>
+            <a className="navbar-enquire" href="#contact" onClick={() => setIsOpen(false)}>Enquire Now</a>
           </div>
         </nav>
 
         <div className="navbar-actions">
-          <button className="btn desktop-btn">Contact Us</button>
-          <button className="hamburger" onClick={toggleMenu} aria-label="Toggle menu">
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
-          </button>
+          <a className="navbar-enquire desktop-btn" href="#contact">Enquire Now</a>
         </div>
       </div>
     </header>

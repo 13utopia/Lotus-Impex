@@ -7,7 +7,7 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretkey_change_in_production');
-      req.admin = await Admin.findById(decoded.id).select('-password');
+      req.admin = await Admin.findByPk(decoded.id, { attributes: { exclude: ['password'] } });
       next();
     } catch (error) {
       console.error(error);

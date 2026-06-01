@@ -1,33 +1,45 @@
 import React from 'react';
 import './Statistics.css';
 
-const stats = [
-  { id: 1, number: '70+', label: 'Countries' },
-  { id: 2, label: 'Orders Delivered', number: '10K+' }, // wait, the order might be different. I will stick to number then label
-  { id: 3, number: '250+', label: 'Clients' },
-  { id: 4, number: '50+', label: 'Employees' },
-];
-
 const Statistics = () => {
   return (
-    <section className="statistics">
+    <section className="statistics" id="about">
       <div className="container">
         <div className="stats-grid">
-          <div className="stat-card">
-            <h3>70+</h3>
-            <p>Countries</p>
-          </div>
+          {/* Card 1: White by default, turns blue on hover */}
           <div className="stat-card stat-light">
-            <h3>10K+</h3>
-            <p>Orders Delivered</p>
+            <img src="/images/logo.png" className="lotus-watermark-img" alt="" />
+            <div className="stat-card-content">
+              <h3>70+</h3>
+              <p>Countries Served</p>
+            </div>
           </div>
-          <div className="stat-card">
-            <h3>250+</h3>
-            <p>Clients</p>
-          </div>
+
+          {/* Card 2: White background */}
           <div className="stat-card stat-light">
-            <h3>50+</h3>
-            <p>Employees</p>
+            <img src="/images/logo.png" className="lotus-watermark-img" alt="" />
+            <div className="stat-card-content">
+              <h3>180+</h3>
+              <p>Product Variants</p>
+            </div>
+          </div>
+
+          {/* Card 3: White background */}
+          <div className="stat-card stat-light">
+            <img src="/images/logo.png" className="lotus-watermark-img" alt="" />
+            <div className="stat-card-content">
+              <h3>250+</h3>
+              <p>Global Clients</p>
+            </div>
+          </div>
+
+          {/* Card 4: White background */}
+          <div className="stat-card stat-light">
+            <img src="/images/logo.png" className="lotus-watermark-img" alt="" />
+            <div className="stat-card-content">
+              <h3>85+</h3>
+              <p>Skilled Professionals</p>
+            </div>
           </div>
         </div>
       </div>

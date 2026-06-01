@@ -3,11 +3,12 @@ import Hero from '../components/Hero/Hero';
 import ProductCategories from '../components/ProductCategories/ProductCategories';
 import Statistics from '../components/Statistics/Statistics';
 import Industries from '../components/Industries/Industries';
+import ProjectSection from '../components/ProjectSection/ProjectSection';
 import FeaturedProducts from '../components/FeaturedProducts/FeaturedProducts';
 import Testimonials from '../components/Testimonials/Testimonials';
+import BlogSection from '../components/BlogSection/BlogSection';
 import Workflow from '../components/Workflow/Workflow';
 import Banner from '../components/Banner/Banner';
-import Roadmap from '../components/Roadmap/Roadmap';
 import Enterprise from '../components/Enterprise/Enterprise';
 
 const Home = () => {
@@ -17,11 +18,12 @@ const Home = () => {
       <ProductCategories />
       <Statistics />
       <Industries />
+      <ProjectSection />
       <FeaturedProducts />
       <Testimonials />
-      <Workflow />
+      <BlogSection />
       <Banner />
-      <Roadmap />
+      <Workflow />
       <Enterprise />
     </div>
   );

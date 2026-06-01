@@ -15,13 +15,13 @@ const generateToken = (id) => {
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const admin = await Admin.findOne({ username });
+    const admin = await Admin.findOne({ where: { username } });
 
     if (admin && (await admin.matchPassword(password))) {
       res.json({
-        _id: admin._id,
+        id: admin.id,
         username: admin.username,
-        token: generateToken(admin._id),
+        token: generateToken(admin.id),
       });
     } else {
       res.status(401).json({ message: 'Invalid username or password' });
@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const adminExists = await Admin.findOne({ username });
+    const adminExists = await Admin.findOne({ where: { username } });
 
     if (adminExists) {
       return res.status(400).json({ message: 'Admin already exists' });
@@ -50,15 +50,15 @@ router.post('/register', async (req, res) => {
 
     if (admin) {
       res.status(201).json({
-        _id: admin._id,
+        id: admin.id,
         username: admin.username,
-        token: generateToken(admin._id),
+        token: generateToken(admin.id),
       });
     } else {
       res.status(400).json({ message: 'Invalid admin data' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 

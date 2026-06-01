@@ -1,33 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import '../components/FeaturedProducts/FeaturedProducts.css'; // Reuse styles
+import './Products.css';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [keyword, setKeyword] = useState('');
   const location = useLocation();
+
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const activeCategoryId = searchParams.get('category');
+  const activeCategory = useMemo(
+    () => categories.find((category) => String(category.id) === String(activeCategoryId)),
+    [categories, activeCategoryId]
+  );
 
   useEffect(() => {
     fetchProducts();
     fetchCategories();
-  }, [location.search]);
+  }, []);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const res = await axios.get('http://localhost:5000/api/products');
-      const params = new URLSearchParams(location.search);
-      const categoryId = params.get('category');
-      
-      let fetchedProducts = res.data;
-      if (categoryId) {
-        fetchedProducts = fetchedProducts.filter(p => p.category?._id === categoryId);
-      }
-      setProducts(fetchedProducts);
+      setProducts(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -36,70 +38,185 @@ const Products = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/categories');
-      setCategories(res.data);
+      setCategories(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
+      setCategories([]);
     }
   };
 
-  return (
-    <div className="page-container" style={{ padding: '100px 0', minHeight: '80vh', backgroundColor: '#f9f9f9' }}>
-      <div className="container">
-        <h2 className="section-title text-center">All <span>Products</span></h2>
-        
-        <div style={{ display: 'flex', gap: '30px', marginTop: '40px' }}>
-          {/* Sidebar Filters */}
-          <aside style={{ width: '250px', background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)', alignSelf: 'flex-start' }}>
-            <h3 style={{ marginBottom: '20px', fontSize: '1.2rem', color: '#0b1a30' }}>Categories</h3>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              <li style={{ marginBottom: '10px' }}>
-                <Link to="/products" style={{ color: '#4a5568', textDecoration: 'none', fontWeight: !new URLSearchParams(location.search).get('category') ? 'bold' : 'normal' }}>
-                  All Products
-                </Link>
-              </li>
-              {categories.map(cat => (
-                <li key={cat._id} style={{ marginBottom: '10px' }}>
-                  <Link 
-                    to={`/products?category=${cat._id}`} 
-                    style={{ 
-                      color: '#4a5568', 
-                      textDecoration: 'none',
-                      fontWeight: new URLSearchParams(location.search).get('category') === cat._id ? 'bold' : 'normal'
-                    }}
-                  >
-                    {cat.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </aside>
+  const filteredProducts = products.filter((product) => {
+    const matchCategory = !activeCategoryId || String(product.category?.id) === String(activeCategoryId);
+    const haystack = `${product.title || ''} ${product.description || ''} ${product.category?.name || ''}`.toLowerCase();
+    const matchKeyword = !keyword.trim() || haystack.includes(keyword.toLowerCase());
+    return matchCategory && matchKeyword;
+  });
 
-          {/* Product Grid */}
-          <div style={{ flex: 1 }}>
-            {loading ? (
-              <p>Loading products...</p>
-            ) : (
-              <div className="featured-grid">
-                {products.map((item) => (
-                  <div className="featured-card" key={item._id}>
-                    <div className="featured-img-wrapper">
-                      <img src={item.images?.length ? `http://localhost:5000${item.images[0]}` : '/images/Link.png'} alt={item.title} />
+  const productsByCategory = categories.map((category) => ({
+    ...category,
+    items: filteredProducts.filter((product) => String(product.category?.id) === String(category.id)),
+  }));
+
+  const productBadges = (product) => {
+    const badges = [];
+    if (product.is_featured) badges.push('Featured');
+    if (product.is_new_arrival) badges.push('New Arrival');
+    if (product.is_best_seller) badges.push('Best Seller');
+    return badges;
+  };
+
+  const pageTitle = activeCategory?.name || 'Products';
+  const pageBreadcrumb = activeCategory ? (
+    <>
+      <Link to="/">Home</Link>
+      <span>/</span>
+      <Link to="/products">Products</Link>
+      <span>/</span>
+      <span>{activeCategory.name}</span>
+    </>
+  ) : (
+    <>
+      <Link to="/">Home</Link>
+      <span>/</span>
+      <span>Products</span>
+    </>
+  );
+
+  return (
+    <div className="products-page">
+      <section className="products-shell">
+        <div className="container">
+          <div className="products-page-header">
+            <h1>{pageTitle}</h1>
+            <div className="products-breadcrumb">{pageBreadcrumb}</div>
+          </div>
+
+          <div className="products-search-bar">
+            <input
+              type="text"
+              placeholder="Keywords"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              aria-label="Search products"
+            />
+            <button type="button" aria-label="Search products">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="products-loading">Loading products...</div>
+          ) : activeCategory ? (
+            <div className="products-category-layout">
+              <aside className="products-sidebar">
+                <div className="products-sidebar-title">Products</div>
+                <div className="products-sidebar-list">
+                  {productsByCategory.map((category) => (
+                    <div className={`sidebar-category ${String(category.id) === String(activeCategoryId) ? 'active' : ''}`} key={category.id}>
+                      <Link className="sidebar-category-title" to={`/products?category=${category.id}`}>
+                        {category.name}
+                      </Link>
+                      {category.items.length > 0 && (
+                        <ul className="sidebar-product-list">
+                          {category.items.map((item) => (
+                            <li key={item.id}>
+                              <Link to={`/product/${item.id}`}>{item.title}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                    <div className="featured-content">
-                      <h4>{item.title}</h4>
-                      <p style={{ color: '#0056b3', fontWeight: 'bold' }}>${item.price}</p>
-                      <Link to={`/product/${item._id}`} className="btn btn-outline small-btn mt-10">View Details</Link>
-                    </div>
-                  </div>
-                ))}
-                {products.length === 0 && (
-                  <p>No products found in this category.</p>
+                  ))}
+                </div>
+              </aside>
+
+              <div className="products-main">
+                <div className="products-grid products-grid--category">
+                    {filteredProducts.map((item) => (
+                      <Link to={`/product/${item.id}`} className="product-card" key={item.id}>
+                        <div className="product-card-image">
+                          {productBadges(item).length > 0 && (
+                            <div className="product-card-badges">
+                              {productBadges(item).map((badge) => (
+                                <span key={badge} className="product-card-badge">
+                                  {badge}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {item.images?.length ? (
+                            <img
+                              src={`http://localhost:5000${item.images[0]}`}
+                              alt={item.title}
+                            />
+                          ) : (
+                            <div className="product-card-image-empty">No image</div>
+                          )}
+                      </div>
+                      <div className="product-card-body">
+                        <h3>{item.title}</h3>
+                        {item.price ? <p>${item.price}</p> : null}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {!filteredProducts.length && (
+                  <div className="products-empty">No products found in this category.</div>
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <>
+              {productsByCategory.map((category) => (
+                <section className="category-block" key={category.id}>
+                  <div className="category-block-header">
+                    <h2>{category.name}</h2>
+                    <Link to={`/products?category=${category.id}`}>MORE</Link>
+                  </div>
+
+                  <div className="products-grid">
+                    {category.items.slice(0, 4).map((item) => (
+                      <Link to={`/product/${item.id}`} className="product-card" key={item.id}>
+                        <div className="product-card-image">
+                          {productBadges(item).length > 0 && (
+                            <div className="product-card-badges">
+                              {productBadges(item).map((badge) => (
+                                <span key={badge} className="product-card-badge">
+                                  {badge}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {item.images?.length ? (
+                            <img
+                              src={`http://localhost:5000${item.images[0]}`}
+                              alt={item.title}
+                            />
+                          ) : (
+                            <div className="product-card-image-empty">No image</div>
+                          )}
+                        </div>
+                        <div className="product-card-body">
+                          <h3>{item.title}</h3>
+                          {item.price ? <p>${item.price}</p> : null}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              ))}
+
+              {!productsByCategory.length && (
+                <div className="products-empty">No categories found.</div>
+              )}
+            </>
+          )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

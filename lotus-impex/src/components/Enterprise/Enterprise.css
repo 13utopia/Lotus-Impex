@@ -1,99 +1,260 @@
-.enterprise {
-  padding: 100px 20px;
-  background-color: var(--white);
+.enterprise-section {
+  padding: 80px 0;
+  background-color: #ffffff;
 }
 
-.enterprise-container {
-  display: flex;
+.enterprise-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr; /* push image further right and give it more width ratio */
+  gap: 80px; /* increase gap to push image section more right */
   align-items: center;
-  gap: 60px;
 }
 
-.enterprise-content {
-  flex: 1;
-}
-
-.enterprise-title {
-  font-size: 3rem;
-  line-height: 1.1;
-  margin-bottom: 25px;
-  color: var(--text-dark);
-}
-
-.enterprise-title span {
-  color: var(--primary-blue);
-}
-
-.enterprise-content > p {
-  font-size: 1.1rem;
-  color: var(--text-muted);
-  margin-bottom: 40px;
-  line-height: 1.8;
-}
-
-.enterprise-features {
+.enterprise-left {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-bottom: 40px;
 }
 
-.feature-item {
+/* Subtitle Styling */
+.enterprise-subtitle {
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-
-.feature-icon {
-  width: 30px;
-  height: 30px;
-  background-color: var(--primary-blue);
-  color: var(--white);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  font-weight: bold;
-  flex-shrink: 0;
-  margin-top: 5px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.feature-text h5 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: var(--text-dark);
+.enterprise-subtitle .subtitle-line {
+  display: inline-block;
+  height: 1px;
+  width: 35px;
+  background-color: #11497F;
 }
 
-.feature-text p {
-  font-size: 0.95rem;
-  color: var(--text-muted);
+.enterprise-subtitle .subtitle-text {
+  font-family: 'Hind Vadodara', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #11497F;
+}
+
+/* Heading Styling */
+.enterprise-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px; /* reduced from 87px to force ENTERPRISE SUPPLY to stay in one line */
+  line-height: 76px;
+  letter-spacing: 2px;
+  color: #192437;
+  text-transform: uppercase;
+  margin: 0 0 20px 0;
+}
+
+.enterprise-title .blue-text {
+  color: #11497F;
+}
+
+/* Description Text */
+.enterprise-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px; /* increased to 18px */
+  line-height: 30px;
+  color: #727272;
+  margin-bottom: 35px;
+  max-width: 620px;
+}
+
+/* B2B Grid Cards Styling */
+.enterprise-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.enterprise-feature-card {
+  background-color: #15181e;
+  border-radius: 12px;
+  padding: 16px 20px; /* reduced card height by cutting padding */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.enterprise-feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  border-color: rgba(17, 73, 127, 0.4);
+}
+
+.feature-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px; /* spacing before description */
+}
+
+.feature-card-icon {
+  width: 32px; /* slightly smaller for clean alignment */
+  height: 32px;
+  color: #3b82f6; /* Bright cyan/blue accent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-card-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.feature-card-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px; /* slightly smaller to fit nicely in one line */
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: none; /* Prevents default Oswald headers */
+  margin: 0; /* removed bottom margin to keep on one line */
+}
+
+.feature-card-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; /* tight clean B2B layout */
+  line-height: 19px;
+  color: rgba(255, 255, 255, 0.65);
   margin: 0;
 }
 
-.enterprise-image {
-  flex: 1;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-.enterprise-image img {
+/* Right Column Image & Absolute Overlaid Quote Card */
+.enterprise-right {
   width: 100%;
-  height: auto;
+}
+
+.enterprise-image-wrapper {
+  position: relative;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   display: block;
-  transition: transform 0.5s ease;
+  height: 520px; /* increased image height significantly */
 }
 
-.enterprise-image:hover img {
-  transform: scale(1.03);
+.enterprise-image {
+  width: 100%;
+  height: 100%; /* fill container height */
+  display: block;
+  object-fit: cover;
 }
 
-@media (max-width: 992px) {
-  .enterprise-container {
-    flex-direction: column;
+.bulk-quote-card {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
+  background: rgba(17, 73, 127, 0.48); /* exact Figma transparency background */
+  backdrop-filter: blur(10px); /* elegant frosted glassmorphism */
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px; /* exact Figma border radius */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* exact Figma border */
+  padding: 33px; /* exact Figma padding alignment */
+  color: #ffffff;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.bulk-quote-title {
+  font-family: 'Space Grotesk', sans-serif; /* exact Figma heading font */
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: none;
+  line-height: 32px;
+  margin: 0 0 12px 0;
+}
+
+.bulk-quote-desc {
+  font-family: 'Inter', sans-serif; /* exact Figma description font */
+  font-size: 14px;
+  line-height: 23px;
+  color: rgba(255, 255, 255, 0.78); /* exact Figma color */
+  margin-bottom: 24px;
+}
+
+.bulk-quote-btn {
+  width: 194px; /* exact Figma width (193.66px) */
+  height: 48px; /* exact Figma height */
+  background-color: #11497F;
+  border-radius: 12px; /* exact Figma border radius */
+  border: none;
+  color: #ffffff;
+  padding: 0 24px; /* exact Figma positioning: text left 24px, svg left 151.66px (194-18-24 = 152px) */
+  font-family: 'Inter', sans-serif; /* exact Figma button font */
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.bulk-quote-btn:hover {
+  background-color: #0b345b;
+}
+
+.quote-btn-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.bulk-quote-btn:hover .quote-btn-arrow {
+  transform: translateX(4px);
+}
+
+/* Responsive Rules */
+@media (max-width: 1024px) {
+  .enterprise-wrapper {
+    grid-template-columns: 1fr;
+    gap: 50px;
   }
-  
+
   .enterprise-title {
-    font-size: 2.5rem;
+    font-size: 68px;
+    line-height: 72px;
+  }
+}
+
+@media (max-width: 600px) {
+  .enterprise-section {
+    padding: 60px 0 96px;
+  }
+
+  .enterprise-title {
+    font-size: 45px;
+    line-height: 48px;
+  }
+
+  .enterprise-feature-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .enterprise-image-wrapper {
+    height: auto;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+
+  .bulk-quote-card {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: 20px;
+    margin-bottom: 4px;
+    background: rgba(17, 73, 127, 0.95);
+    padding: 24px 20px;
   }
 }
