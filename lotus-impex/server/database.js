@@ -2,11 +2,14 @@ const { Sequelize } = require('sequelize');
 const path = require('path');
 const fs = require('fs');
 
-const storagePath = process.env.DATABASE_PATH
+const defaultStoragePath = path.join(__dirname, 'database.sqlite');
+const configuredStoragePath = process.env.DATABASE_PATH
   ? path.resolve(process.env.DATABASE_PATH)
-  : path.join(__dirname, 'database.sqlite');
+  : '';
 
-fs.mkdirSync(path.dirname(storagePath), { recursive: true });
+const storagePath = configuredStoragePath && fs.existsSync(path.dirname(configuredStoragePath))
+  ? configuredStoragePath
+  : defaultStoragePath;
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
