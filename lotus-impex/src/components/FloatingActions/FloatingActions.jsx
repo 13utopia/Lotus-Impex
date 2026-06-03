@@ -64,21 +64,21 @@ const actions = [
 
 const FloatingActions = () => {
   return (
-    <aside className="floating-actions" aria-label="Quick contact actions">
+    <aside className="fixed-sidebar-v2 glass-theme" aria-label="Quick contact actions">
       {actions.map((action) => (
         <a
           key={action.label}
-          className={`floating-actions__item${action.active ? ' floating-actions__item--active' : ''}`}
+          className={`sidebar-item-v2${action.active ? ' floating-actions__item--active' : ''}${action.label === 'Quote' ? ' is-quote' : ''}`}
           href={action.href}
           target={action.href.startsWith('http') ? '_blank' : undefined}
           rel={action.href.startsWith('http') ? 'noreferrer' : undefined}
           aria-label={action.label}
           title={action.label}
         >
-          <span className="floating-actions__icon" aria-hidden="true">
+          <span className="quote-box-inner" aria-hidden="true">
             {action.icon}
           </span>
-          <span className="floating-actions__label">{action.label}</span>
+          <span>{action.label}</span>
         </a>
       ))}
     </aside>

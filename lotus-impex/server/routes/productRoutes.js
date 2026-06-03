@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const fs = require('fs/promises');
 const path = require('path');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
@@ -29,6 +30,23 @@ const upload = multer({
     }
   },
 });
+
+const deleteImageFile = async (imagePath) => {
+  if (!imagePath || typeof imagePath !== 'string') {
+    return;
+  }
+
+  const normalizedPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+  const absolutePath = path.join(__dirname, '..', normalizedPath);
+
+  try {
+    await fs.unlink(absolutePath);
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw error;
+    }
+  }
+};
 
 // @desc    Upload product images (multiple)
 // @route   POST /api/products/upload
@@ -97,12 +115,23 @@ router.put('/:id', protect, async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id);
     if (product) {
+      const removedImages = Array.isArray(req.body.removedImages) ? req.body.removedImages.filter(Boolean) : [];
       const nextImages = Array.isArray(req.body.images) ? req.body.images.filter(Boolean) : [];
       if (nextImages.length === 0) {
         return res.status(400).json({ message: 'At least one product image is required' });
       }
 
-      await product.update(req.body);
+      for (const imagePath of removedImages) {
+        await deleteImageFile(imagePath);
+      }
+
+      const updatePayload = {
+        ...req.body,
+        images: nextImages,
+      };
+      delete updatePayload.removedImages;
+
+      await product.update(updatePayload);
       res.json(product);
     } else {
       res.status(404).json({ message: 'Product not found' });
@@ -119,6 +148,10 @@ router.delete('/:id', protect, async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id);
     if (product) {
+      const productImages = Array.isArray(product.images) ? product.images : [];
+      for (const imagePath of productImages) {
+        await deleteImageFile(imagePath);
+      }
       await product.destroy();
       res.json({ message: 'Product removed' });
     } else {

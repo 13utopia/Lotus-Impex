@@ -144,7 +144,7 @@
   margin-top: 32px;
   border-radius: 16px;
   padding: 28px 30px;
-  background: linear-gradient(180deg, rgba(28, 58, 98, 0.96) 0%, rgba(23, 50, 86, 0.96) 100%);
+  background: #11497F;
   box-shadow: 0 24px 56px rgba(2, 8, 20, 0.32);
   border: 1px solid rgba(255, 255, 255, 0.08);
   pointer-events: auto;

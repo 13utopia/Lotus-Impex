@@ -21,10 +21,10 @@
   border-radius: 22px;
   overflow: hidden;
   background:
-    linear-gradient(180deg, rgba(17, 73, 127, 0.94), rgba(17, 73, 127, 0.94)),
-    url('/images/import.webp');
+    linear-gradient(180deg, rgba(17, 73, 127, 0.88), rgba(17, 73, 127, 0.88)),
+    url('/images/ship.webp');
   background-size: cover;
-  background-position: center center;
+  background-position: left center;
   box-shadow: 0 12px 28px rgba(17, 73, 127, 0.18);
 }
 
@@ -41,7 +41,7 @@
 .success-story-visual-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(17, 73, 127, 0.12);
+  background: rgba(17, 73, 127, 0.18);
   z-index: 0;
 }
 

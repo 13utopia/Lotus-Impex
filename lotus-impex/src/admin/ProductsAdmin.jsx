@@ -38,6 +38,7 @@ const ProductsAdmin = () => {
   const [application, setApplication] = useState('');
   const [specifications, setSpecifications] = useState([{ key: '', value: '' }]);
   const [images, setImages] = useState([]); // For display of existing images
+  const [removedImages, setRemovedImages] = useState([]);
   const [imageFiles, setImageFiles] = useState(null); // For new uploads
   const [isFeatured, setIsFeatured] = useState(false);
   const [isNewArrival, setIsNewArrival] = useState(false);
@@ -77,6 +78,7 @@ const ProductsAdmin = () => {
         setApplication(draft.application || '');
         setSpecifications(Array.isArray(draft.specifications) && draft.specifications.length ? draft.specifications : [{ key: '', value: '' }]);
         setImages(Array.isArray(draft.images) ? draft.images : []);
+        setRemovedImages(Array.isArray(draft.removedImages) ? draft.removedImages : []);
         setIsFeatured(Boolean(draft.isFeatured));
         setIsNewArrival(Boolean(draft.isNewArrival));
         setIsBestSeller(Boolean(draft.isBestSeller));
@@ -120,6 +122,7 @@ const ProductsAdmin = () => {
         application,
         specifications,
         images,
+        removedImages,
         isFeatured,
         isNewArrival,
         isBestSeller,
@@ -154,6 +157,7 @@ const ProductsAdmin = () => {
     application,
     specifications,
     images,
+    removedImages,
     isFeatured,
     isNewArrival,
     isBestSeller,
@@ -179,6 +183,13 @@ const ProductsAdmin = () => {
 
   const handleAddSpec = () => {
     setSpecifications([...specifications, { key: '', value: '' }]);
+  };
+
+  const handleRemoveImage = (imagePath) => {
+    setImages((prevImages) => prevImages.filter((img) => img !== imagePath));
+    setRemovedImages((prevRemoved) => (
+      prevRemoved.includes(imagePath) ? prevRemoved : [...prevRemoved, imagePath]
+    ));
   };
 
   const handleSpecChange = (index, field, val) => {
@@ -218,6 +229,7 @@ const ProductsAdmin = () => {
     setApplication('');
     setSpecifications([{ key: '', value: '' }]);
     setImages([]);
+    setRemovedImages([]);
     setImageFiles(null);
     setIsFeatured(false);
     setIsNewArrival(false);
@@ -271,6 +283,7 @@ const ProductsAdmin = () => {
         application,
         specifications: specifications.filter(s => s.key && s.value),
         images: uploadedImageUrls,
+        removedImages: isEditing ? removedImages : [],
         is_featured: isFeatured,
         is_new_arrival: isNewArrival,
         is_best_seller: isBestSeller
@@ -317,6 +330,7 @@ const ProductsAdmin = () => {
     setApplication(product.application || '');
     setSpecifications(product.specifications?.length ? product.specifications : [{ key: '', value: '' }]);
     setImages(product.images || []);
+    setRemovedImages([]);
     setImageFiles(null);
     setIsFeatured(product.is_featured || false);
     setIsNewArrival(product.is_new_arrival || false);
@@ -381,7 +395,18 @@ const ProductsAdmin = () => {
             {images.length > 0 && (
               <div className="admin-image-preview">
                 {images.map((img, idx) => (
-                  <img key={idx} src={`${API_BASE_URL}${img}`} alt="Preview" width="50" />
+                  <div key={img} className="admin-image-preview-item">
+                    <img src={`${API_BASE_URL}${img}`} alt="Preview" width="50" height="50" />
+                    <button
+                      type="button"
+                      className="admin-image-remove-btn"
+                      onClick={() => handleRemoveImage(img)}
+                      aria-label={`Remove image ${idx + 1}`}
+                      title="Remove image"
+                    >
+                      ×
+                    </button>
+                  </div>
                 ))}
               </div>
             )}

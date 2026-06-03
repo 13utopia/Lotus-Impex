@@ -7,7 +7,7 @@
   display: grid;
   grid-template-columns: 1fr 1.25fr; /* push image further right and give it more width ratio */
   gap: 80px; /* increase gap to push image section more right */
-  align-items: center;
+  align-items: end;
 }
 
 .enterprise-left {
@@ -74,7 +74,7 @@
 .enterprise-feature-card {
   background-color: #15181e;
   border-radius: 12px;
-  padding: 16px 20px; /* reduced card height by cutting padding */
+  padding: 14px 20px;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(255, 255, 255, 0.04);
@@ -91,7 +91,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 10px; /* spacing before description */
+  margin-bottom: 8px;
 }
 
 .feature-card-icon {
@@ -119,8 +119,8 @@
 
 .feature-card-desc {
   font-family: 'Poppins', sans-serif;
-  font-size: 13px; /* tight clean B2B layout */
-  line-height: 19px;
+  font-size: 12px;
+  line-height: 18px;
   color: rgba(255, 255, 255, 0.65);
   margin: 0;
 }
@@ -136,7 +136,7 @@
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   display: block;
-  height: 520px; /* increased image height significantly */
+  height: 440px;
 }
 
 .enterprise-image {
@@ -218,6 +218,7 @@
   .enterprise-wrapper {
     grid-template-columns: 1fr;
     gap: 50px;
+    align-items: center;
   }
 
   .enterprise-title {

@@ -27,8 +27,24 @@
 
 .featured-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--cards-per-page, 4), minmax(0, 1fr));
   gap: 24px;
+}
+
+.featured-carousel {
+  overflow: hidden;
+}
+
+.featured-carousel-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+.featured-carousel-page {
+  flex: 0 0 100%;
+  min-width: 100%;
 }
 
 .featured-card {
@@ -136,16 +152,25 @@
 }
 
 .pagination-dot {
+  appearance: none;
+  border: none;
   width: 7px;
   height: 7px;
   border-radius: 50%;
   background-color: #d1d5db;
   transition: background-color 0.3s ease;
   display: inline-block;
+  padding: 0;
+  cursor: pointer;
 }
 
 .pagination-dot.active {
   background-color: #11497F;
+}
+
+.pagination-dot:focus-visible {
+  outline: 2px solid rgba(17, 73, 127, 0.45);
+  outline-offset: 3px;
 }
 
 .featured-empty {
@@ -168,7 +193,6 @@
 /* Responsive */
 @media (max-width: 992px) {
   .featured-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 

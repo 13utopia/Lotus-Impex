@@ -48,12 +48,24 @@
 /* Blue Banner Container */
 .testimonials-blue-banner {
   background-color: #11497F;
-  background: radial-gradient(circle at center, #1b5b9c 0%, #11497F 100%);
   display: flex;
   align-items: center;
   padding: 50px 20px 40px 20px;
   position: relative;
   overflow: hidden;
+}
+
+.testimonials-blue-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/bearing-bg.webp');
+  background-size: 88%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.34;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Custom background pattern rings details */
