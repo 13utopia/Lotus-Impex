@@ -328,10 +328,17 @@
 @media (max-width: 900px) {
   .admin-layout {
     flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   .admin-sidebar {
     width: 100%;
+    height: auto;
+    position: relative;
+    top: auto;
+    overflow: hidden;
   }
 
   .admin-logo {
@@ -345,22 +352,31 @@
     gap: 8px;
     padding: 12px 12px 6px;
     justify-content: center;
+    overflow-x: auto;
   }
 
   .admin-nav-link {
     padding: 10px 14px;
     border-radius: 999px;
+    white-space: nowrap;
+    flex: 0 0 auto;
   }
 
   .admin-logout-btn {
-    width: 100%;
-    text-align: center;
-    margin-top: 0;
-    padding: 14px 20px 18px;
+    width: calc(100% - 24px);
+    text-align: left;
+    margin: 0 12px 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(229, 62, 62, 0.22);
+    background-color: rgba(229, 62, 62, 0.08);
   }
 
   .admin-content {
     padding: 18px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
   }
 
   .admin-page {
@@ -397,6 +413,7 @@
 
   .admin-card {
     overflow-x: auto;
+    max-width: 100%;
   }
 
   .admin-table {
@@ -413,6 +430,10 @@
 }
 
 @media (max-width: 480px) {
+  .admin-sidebar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .admin-content {
     padding: 12px;
   }
@@ -429,6 +450,10 @@
   .admin-nav-link,
   .admin-logout-btn {
     font-size: 0.95rem;
+  }
+
+  .admin-nav {
+    justify-content: flex-start;
   }
 
   .admin-card {
