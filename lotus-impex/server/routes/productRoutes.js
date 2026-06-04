@@ -47,7 +47,7 @@ const deleteImageFile = async (imagePath) => {
     await fs.unlink(absolutePath);
   } catch (error) {
     if (error.code !== 'ENOENT') {
-      throw error;
+      throw error;   
     }
   }
 };
