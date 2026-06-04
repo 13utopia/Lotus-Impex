@@ -5,12 +5,13 @@ const path = require('path');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 const { protect } = require('../middleware/authMiddleware');
+const { uploadsDir } = require('../storagePaths');
 const router = express.Router();
 
 // Multer config for image uploads
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, uploadsDir);
   },
   filename(req, file, cb) {
     cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
