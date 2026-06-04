@@ -1,8 +1,9 @@
 .admin-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f4f7f6;
   font-family: 'Inter', sans-serif;
+  overflow: hidden;
 }
 
 .admin-sidebar {
@@ -11,6 +12,11 @@
   color: #fff;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .admin-logo {
@@ -18,6 +24,23 @@
   font-size: 1.5rem;
   font-weight: bold;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-logout-btn {
+  margin-top: auto;
+  padding: 15px 20px;
+  background: none;
+  border: none;
+  color: #e53e3e;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-logout-btn:hover {
+  background-color: rgba(229, 62, 62, 0.1);
 }
 
 .admin-nav {
@@ -39,25 +62,11 @@
   color: #fff;
 }
 
-.admin-logout-btn {
-  padding: 15px 20px;
-  background: none;
-  border: none;
-  color: #e53e3e;
-  text-align: left;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.3s ease;
-}
-
-.admin-logout-btn:hover {
-  background-color: rgba(229, 62, 62, 0.1);
-}
-
 .admin-content {
   flex: 1;
   padding: 30px;
   overflow-y: auto;
+  height: 100vh;
 }
 
 /* Login Page Styles */
@@ -346,6 +355,7 @@
   .admin-logout-btn {
     width: 100%;
     text-align: center;
+    margin-top: 0;
     padding: 14px 20px 18px;
   }
 
