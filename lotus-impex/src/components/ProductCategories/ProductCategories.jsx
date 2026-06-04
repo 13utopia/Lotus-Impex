@@ -1,63 +1,69 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/api';
 import './ProductCategories.css';
 
-const categories = [
-  { 
-    id: 1, 
-    title: 'Sanitary Butterfly Valve', 
-    desc: 'manufacturer, supplier and exporter for Sanitary Stainless Steel Butte...', 
-    img: '/images/Link.png' 
-  },
-  { 
-    id: 2, 
-    title: 'Sanitary Ball Valve', 
-    desc: 'Group Equipment Products Sanitary Ball Valves classified by valve body', 
-    img: '/images/Link-1.png' 
-  },
-  { 
-    id: 3, 
-    title: 'Sanitary Check Valve', 
-    desc: 'Stainless Steel Sanitary Check valves are typically installed to prevent the rev...', 
-    img: '/images/Link-2.png' 
-  },
-  { 
-    id: 4, 
-    title: 'Sanitary Fittings', 
-    desc: 'manufacturer and supplier of sanitary pipe fittings, sanitary', 
-    img: '/images/Link-3.png' 
-  },
-  { 
-    id: 5, 
-    title: 'Sanitary Clamped Fittings', 
-    desc: 'Qili Group Equipment Products Sanitary Clamp Fittings were origin...', 
-    img: '/images/Link-2.png' 
-  },
-  { 
-    id: 6, 
-    title: 'BioPharm (BPE) Fittings', 
-    desc: 'Certified fittings manufaturer by ASME BPE Org. China QILI ASME BPE-189 certific...', 
-    img: '/images/Link-1.png' 
-  },
-  { 
-    id: 7, 
-    title: 'Sanitary Clamp', 
-    desc: 'Sanitary Clamp Fittings are available with a variety of I.D. and O.D.&...', 
-    img: '/images/Link-3.png' 
-  },
-  { 
-    id: 8, 
-    title: 'Sanitary Hose Fittings', 
-    desc: 'Qili Holding Group is a professional Sanitary Hose Fittings, hygienic pipe fitti...', 
-    img: '/images/Link.png' 
-  },
-];
+const PRODUCTS_CACHE_KEY = 'lotus-impex-home-products-cache';
 
 const ProductCategories = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState(() => {
+    try {
+      const cached = localStorage.getItem(PRODUCTS_CACHE_KEY);
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [loading, setLoading] = useState(() => products.length === 0);
 
-  const filteredCategories = categories.filter((cat) =>
-    cat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    cat.desc.toLowerCase().includes(searchQuery.toLowerCase())
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/products`);
+        const nextProducts = Array.isArray(res.data) ? res.data : [];
+        setProducts(nextProducts);
+        localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(nextProducts));
+      } catch (error) {
+        console.error('Failed to load homepage products', error);
+        setProducts([]);
+        localStorage.removeItem(PRODUCTS_CACHE_KEY);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filteredProducts = products.filter((product) => {
+    const haystack = [
+      product.title,
+      product.description,
+      product.features,
+      product.category?.name,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    return haystack.includes(searchQuery.toLowerCase());
+  });
+
+  const getProductDescription = (product) => {
+    const fallbackText = product.category?.name || 'View the product details and specifications.';
+    const sourceText = product.description || product.features || fallbackText;
+    return sourceText.length > 110 ? `${sourceText.slice(0, 107)}...` : sourceText;
+  };
+
+  const getProductImage = (product) => {
+    const imagePath = product.images?.[0];
+    return imagePath ? `${API_BASE_URL}${imagePath}` : '/images/Link.png';
+  };
+
+  const getCardBackground = (index) => (
+    `/images/product-bg${(index % 2) + 1}.webp`
   );
 
   return (
@@ -77,35 +83,55 @@ const ProductCategories = () => {
             className="search-input"
           />
         </div>
-        
-        {filteredCategories.length > 0 ? (
+
+        {loading ? (
+          <div className="categories-grid" aria-busy="true" aria-live="polite">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div className="category-card" key={index}>
+                <div className="category-img-wrapper" style={{ backgroundImage: `url(/images/product-bg${(index % 2) + 1}.webp)` }}>
+                  <div className="product-img category-card-skeleton" />
+                </div>
+                <div className="category-content">
+                  <div className="category-skeleton category-skeleton--title" />
+                  <div className="category-skeleton category-skeleton--line" />
+                  <div className="category-skeleton category-skeleton--line category-skeleton--short" />
+                  <div className="category-skeleton category-skeleton--button" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filteredProducts.length > 0 ? (
           <div className="categories-grid">
-            {filteredCategories.map((cat, index) => (
-              <div className="category-card" key={cat.id}>
+            {filteredProducts.map((product, index) => (
+              <div className="category-card" key={product.id}>
                 <div 
                   className="category-img-wrapper"
                   style={{ 
-                    backgroundImage: `url(/images/product-bg${(index % 2) + 1}.webp)` 
+                    backgroundImage: `url(${getCardBackground(index)})` 
                   }}
                 >
-                  <img src={cat.img} alt={cat.title} className="product-img" />
+                  {product.images?.length ? (
+                    <img src={getProductImage(product)} alt={product.title} className="product-img" />
+                  ) : (
+                    <div className="product-img product-img--empty">No image</div>
+                  )}
                 </div>
                 <div className="category-content">
-                  <h3>{cat.title}</h3>
-                  <p>{cat.desc}</p>
-                  <button className="btn btn-outline category-btn">READ MORE</button>
+                  <h3>{product.title}</h3>
+                  <p>{getProductDescription(product)}</p>
+                  <Link className="btn btn-outline category-btn" to={`/product/${product.id}`}>READ MORE</Link>
                 </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="no-results">
-            <p>No products found matching "{searchQuery}"</p>
+            <p>{searchQuery ? `No products found matching "${searchQuery}"` : 'No products found.'}</p>
           </div>
         )}
         
         <div className="categories-actions">
-           <button className="btn view-all-btn">View All</button>
+           <Link className="btn view-all-btn" to="/products">View All</Link>
         </div>
       </div>
     </section>
