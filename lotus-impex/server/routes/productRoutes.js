@@ -37,8 +37,11 @@ const deleteImageFile = async (imagePath) => {
     return;
   }
 
-  const normalizedPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-  const absolutePath = path.join(__dirname, '..', normalizedPath);
+  const normalizedPath = imagePath.replace(/\\/g, '/');
+  const fileName = normalizedPath.startsWith('/uploads/')
+    ? normalizedPath.split('/').pop()
+    : path.basename(normalizedPath);
+  const absolutePath = path.join(uploadsDir, fileName);
 
   try {
     await fs.unlink(absolutePath);
@@ -56,7 +59,7 @@ router.post('/upload', protect, upload.array('images', 5), (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).send('No image uploaded');
   }
-  const imagePaths = req.files.map(file => `/${file.path.replace(/\\/g, '/')}`);
+  const imagePaths = req.files.map(file => `/uploads/${file.filename}`);
   res.json({ imagePaths });
 });
 
