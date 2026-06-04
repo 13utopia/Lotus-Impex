@@ -126,13 +126,13 @@
 }
 
 @media (max-width: 480px) {
+  .sidebar-item-v2 span {
+    display: none;
+  }
+
   .fixed-sidebar-v2 {
     width: 50px;
     padding: 0;
-  }
-
-  .sidebar-item-v2 span {
-    display: none;
   }
 
   .sidebar-item-v2.is-quote .quote-box-inner {
